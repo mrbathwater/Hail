@@ -47,6 +47,7 @@ object HailData {
     const val PRIVAPP = "privapp_"
     const val STOP = "stop"
     const val DISABLE = "disable"
+    const val STOP_DISABLE = "stop_disable"
     const val HIDE = "hide"
     const val SUSPEND = "suspend"
     const val WORKING_MODE = "working_mode"
@@ -57,6 +58,7 @@ object HailData {
     const val MODE_SHIZUKU_SUSPEND = SHIZUKU + SUSPEND
     const val MODE_SU_STOP = SU + STOP
     const val MODE_SU_DISABLE = SU + DISABLE
+    const val MODE_SU_STOP_DISABLE = SU + STOP_DISABLE
     const val MODE_SU_HIDE = SU + HIDE
     const val MODE_SU_SUSPEND = SU + SUSPEND
     const val MODE_DHIZUKU_HIDE = DHIZUKU + HIDE
@@ -75,6 +77,7 @@ object HailData {
         MODE_SHIZUKU_SUSPEND,
         MODE_SU_STOP,
         MODE_SU_DISABLE,
+        MODE_SU_STOP_DISABLE,
         MODE_SU_HIDE,
         MODE_SU_SUSPEND,
         MODE_DHIZUKU_HIDE,

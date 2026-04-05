@@ -17,6 +17,7 @@ object AppManager {
         }
 
     fun isAppFrozen(packageName: String): Boolean = when {
+        HailData.workingMode.endsWith(HailData.STOP_DISABLE) -> HPackages.isAppDisabled(packageName)
         HailData.workingMode.endsWith(HailData.STOP) -> HPackages.isAppStopped(packageName)
         HailData.workingMode.endsWith(HailData.DISABLE) -> HPackages.isAppDisabled(packageName)
         HailData.workingMode.endsWith(HailData.HIDE) -> HPackages.isAppHidden(packageName)
@@ -57,6 +58,11 @@ object AppManager {
             HailData.MODE_DHIZUKU_HIDE -> HDhizuku.setAppHidden(packageName, frozen)
             HailData.MODE_DHIZUKU_SUSPEND -> HDhizuku.setAppSuspended(packageName, frozen)
             HailData.MODE_SU_STOP -> !frozen || HShell.forceStopApp(packageName)
+            HailData.MODE_SU_STOP_DISABLE -> if (frozen) {
+                HShell.forceStopApp(packageName) && HShell.setAppDisabled(packageName, true)
+            } else {
+                HShell.setAppDisabled(packageName, false)
+            }
             HailData.MODE_SU_DISABLE -> HShell.setAppDisabled(packageName, frozen)
             HailData.MODE_SU_HIDE -> HShell.setAppHidden(packageName, frozen)
             HailData.MODE_SU_SUSPEND -> HShell.setAppSuspended(packageName, frozen)
