@@ -48,6 +48,7 @@
     <string name="mode_owner_suspend">Device Owner - Suspend</string>
     <string name="mode_su_stop">Root - Force Stop</string>
     <string name="mode_su_disable">Root - Disable</string>
+    <string name="mode_su_stop_disable">Root - Force Stop + Disable</string>
     <string name="mode_su_suspend">Root - Suspend</string>
     <string name="mode_shizuku_stop">Shizuku - Force Stop</string>
     <string name="mode_shizuku_disable">Shizuku - Disable</string>

@@ -1,0 +1,53 @@
+name: Build Test APK
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+          - debug
+          - release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build Debug APK
+        if: ${{ inputs.build_type == 'debug' }}
+        run: ./gradlew assembleDebug
+
+      - name: Build Release APK
+        if: ${{ inputs.build_type == 'release' }}
+        run: |
+          touch signing.properties
+          ./gradlew assembleRelease
+
+      - name: Upload Debug APK
+        if: ${{ inputs.build_type == 'debug' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hail-debug-${{ github.sha }}
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: Upload Release APK
+        if: ${{ inputs.build_type == 'release' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: Hail-release-${{ github.sha }}
+          path: app/build/outputs/apk/release/*.apk

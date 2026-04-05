@@ -41,6 +41,7 @@
         <item>@string/mode_shizuku_suspend</item>
         <item>@string/mode_su_stop</item>
         <item>@string/mode_su_disable</item>
+        <item>@string/mode_su_stop_disable</item>
         <item>@string/mode_su_hide</item>
         <item>@string/mode_su_suspend</item>
         <item>@string/mode_dhizuku_hide</item>
