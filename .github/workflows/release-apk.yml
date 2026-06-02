@@ -1,0 +1,56 @@
+name: Release APK
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Generate an ephemeral signing keystore
+        run: |
+          keytool -genkeypair -v \
+            -keystore keystore.jks \
+            -storepass hailota -keypass hailota \
+            -alias hail -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Hail OTA, OU=ota, O=mrbathwater, C=US"
+          {
+            echo "storeFile=../keystore.jks"
+            echo "storePassword=hailota"
+            echo "keyAlias=hail"
+            echo "keyPassword=hailota"
+          } > signing.properties
+
+      - name: Build release APK
+        run: ./gradlew :app:assembleRelease
+
+      - name: Rename APK to stable asset name
+        run: |
+          src=$(ls app/build/outputs/apk/release/*.apk | head -n1)
+          cp "$src" Hail.apk
+          ls -l Hail.apk
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v1.10.0-priv1' }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || 'v1.10.0-priv1' }}
+          files: Hail.apk

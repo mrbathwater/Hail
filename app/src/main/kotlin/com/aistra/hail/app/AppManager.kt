@@ -74,6 +74,11 @@ object AppManager {
             HailData.MODE_ISLAND_SUSPEND -> HIsland.setAppSuspended(packageName, frozen)
             HailData.MODE_PRIVAPP_STOP -> !frozen || HPackages.forceStopApp(packageName)
             HailData.MODE_PRIVAPP_DISABLE -> HPackages.setAppDisabled(packageName, frozen)
+            HailData.MODE_PRIVAPP_STOP_DISABLE -> if (frozen) {
+                HPackages.forceStopApp(packageName) && HPackages.setAppDisabled(packageName, true)
+            } else {
+                HPackages.setAppDisabled(packageName, false)
+            }
             else -> false
         }
 
